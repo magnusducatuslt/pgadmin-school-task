@@ -1,0 +1,33 @@
+version: "3.5"
+
+services:
+  rs_db:
+    container_name: rs_db_container
+    image: postgres
+    environment:
+      POSTGRES_USER: "${DB_USER}"
+      POSTGRES_PASSWORD: "${DB_PASSWORD}"
+      PGDATA: /data/postgres
+    volumes:
+      - rspgdata:/data/postgres
+    ports:
+      - "5433:5432"
+    # command: sh -c "postgres -U user -c wal_level = hot_standby && postgres -c wal_keep_segments = 1000"
+    restart: unless-stopped
+
+  rs_admin:
+    container_name: rs_db_admin_container
+    image: dpage/pgadmin4:4.21
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "pgadmin4@pgadmin.org"
+      PGADMIN_DEFAULT_PASSWORD: "admin"
+    volumes:
+      - ./pgadmin:/root/.pgadmin
+    ports:
+      - "61000:80"
+    restart: unless-stopped
+    depends_on:
+      - rs_db
+
+volumes:
+  rspgdata:
