@@ -12,7 +12,6 @@ services:
       - rspgdata:/data/postgres
     ports:
       - "5433:5432"
-    # command: sh -c "postgres -U user -c wal_level = hot_standby && postgres -c wal_keep_segments = 1000"
     restart: unless-stopped
 
   rs_admin:
